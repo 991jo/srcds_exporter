@@ -1,0 +1,75 @@
+# HELP gameserver_up is the gameserver reachable
+# TYPE gameserver_up gauge
+gameserver_up 1
+
+# HELP gameserver_players the number of players currently on the server
+# TYPE gameserver_players gauge
+gameserver_players {{players}}
+
+# HELP gameserver_maxplayers the maximum number of players on the server
+# TYPE gameserver_maxplayers gauge
+gameserver_maxplayers {{max_players}}
+
+# HELP gameserver_bots the number of bots on the server
+# TYPE gameserver_bots gauge
+gameserver_bots {{bots}}
+
+{%if CPU is defined%}
+# HELP gameserver_CPU currently unkown
+# TYPE gameserver_CPU gauge
+gameserver_cpu {{CPU}}
+{%endif%}
+
+{% if NetIn is defined %}
+# HELP gameserver_NetIn currently unkown
+# TYPE gameserver_NetIn gauge
+gameserver_NetIn {{NetIn}}
+{% endif %}
+
+{% if NetOut is defined %}
+# HELP gameserver_NetOut currently unkown
+# TYPE gameserver_NetOut gauge
+gameserver_NetOut {{NetOut}}
+{% endif %}
+
+{% if Uptime is defined %}
+# HELP gameserver_Uptime server uptime in minutes
+# TYPE gameserver_Uptime counter
+gameserver_Uptime {{Uptime}}
+{% endif %}
+
+{% if Maps is defined %}
+# HELP gameserver_Maps Number of Maps played
+# TYPE gameserver_Maps gauge
+gameserver_Maps {{Maps}}
+{% endif %}
+
+{% if FPS is defined %}
+# HELP gameserver_FPS currently unkown
+# TYPE gameserver_FPS gauge
+gameserver_FPS {{FPS}}
+{% endif %}
+
+{% if svarms is defined %}
+# HELP gameserver_svarms probably the standard variation of the frametimes in ms
+# TYPE gameserver_svarms gauge
+gameserver_svarms {{svarms}}
+{% endif %}
+
+{% if varms is defined %}
+# HELP gameserver_varms probably the variation of the frametimes in ms
+# TYPE gameserver_varms gauge
+gameserver_varms {{varms}}
+{% endif %}
+
+{% if vartick is defined %}
+# HELP gameserver_vartick probably the variation of ticks
+# TYPE gameserver_vartick gauge
+gameserver_vartick {{vartick}}
+{% endif %}
+
+{% if Users is defined %}{# L4D2 has Users and Players in the "stats" command #}
+# HELP gameserver_Users currently unknown
+# TYPE gameserver_Users gauge
+gameserver_Users {{Users}}
+{% endif %}
