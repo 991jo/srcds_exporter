@@ -69,12 +69,12 @@ async def handler(request):
             return web.Response(text=template.render(**server_dict))
 
         except Exception as e:
-            resp = """# HELP gameserver_up is the gameserver reachable
-# TYPE gameserver_up gauge
-gameserver_up 0"""
+            print(e)
+            resp = """# HELP srcds_up is the gameserver reachable
+# TYPE srcds_up gauge
+srcds_up 0"""
             return web.Response(text=resp)
-
-    return web.Response(text="derpderp")
+    return web.Response(text="invalid path", status=404)
 
 
 async def start_webserver(loop, bind_address, port):
@@ -85,7 +85,6 @@ async def start_webserver(loop, bind_address, port):
 async def main():
     loop = asyncio.get_event_loop()
     loop.create_task(start_webserver(loop, "localhost", 9200))
-
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

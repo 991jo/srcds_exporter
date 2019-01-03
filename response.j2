@@ -1,75 +1,75 @@
-# HELP gameserver_up is the gameserver reachable
-# TYPE gameserver_up gauge
-gameserver_up 1
+# HELP srcds_up is the gameserver reachable
+# TYPE srcds_up gauge
+srcds_up{hostname="{{hostname}}"} 1
 
-# HELP gameserver_players the number of players currently on the server
-# TYPE gameserver_players gauge
-gameserver_players {{players}}
+# HELP srcds_players the number of players currently on the server
+# TYPE srcds_players gauge
+srcds_players{hostname="{{hostname}}"} {{players}}
 
-# HELP gameserver_maxplayers the maximum number of players on the server
-# TYPE gameserver_maxplayers gauge
-gameserver_maxplayers {{max_players}}
+# HELP srcds_maxplayers the maximum number of players on the server
+# TYPE srcds_maxplayers gauge
+srcds_maxplayers{hostname="{{hostname}}"} {{max_players}}
 
-# HELP gameserver_bots the number of bots on the server
-# TYPE gameserver_bots gauge
-gameserver_bots {{bots}}
+# HELP srcds_bots the number of bots on the server
+# TYPE srcds_bots gauge
+srcds_bots{hostname="{{hostname}}"} {{bots}}
 
 {%if CPU is defined%}
-# HELP gameserver_CPU currently unkown
-# TYPE gameserver_CPU gauge
-gameserver_cpu {{CPU}}
+# HELP srcds_CPU currently unkown
+# TYPE srcds_CPU gauge
+srcds_cpu{hostname="{{hostname}}"} {{CPU}}
 {%endif%}
 
 {% if NetIn is defined %}
-# HELP gameserver_NetIn currently unkown
-# TYPE gameserver_NetIn gauge
-gameserver_NetIn {{NetIn}}
+# HELP srcds_NetIn currently unkown
+# TYPE srcds_NetIn gauge
+srcds_NetIn{hostname="{{hostname}}"} {{NetIn}}
 {% endif %}
 
 {% if NetOut is defined %}
-# HELP gameserver_NetOut currently unkown
-# TYPE gameserver_NetOut gauge
-gameserver_NetOut {{NetOut}}
+# HELP srcds_NetOut currently unkown
+# TYPE srcds_NetOut gauge
+srcds_NetOut{hostname="{{hostname}}"} {{NetOut}}
 {% endif %}
 
 {% if Uptime is defined %}
-# HELP gameserver_Uptime server uptime in minutes
-# TYPE gameserver_Uptime counter
-gameserver_Uptime {{Uptime}}
+# HELP srcds_Uptime server uptime in minutes
+# TYPE srcds_Uptime counter
+srcds_Uptime{hostname="{{hostname}}"} {{Uptime}}
 {% endif %}
 
 {% if Maps is defined %}
-# HELP gameserver_Maps Number of Maps played
-# TYPE gameserver_Maps gauge
-gameserver_Maps {{Maps}}
+# HELP srcds_Maps Number of Maps played
+# TYPE srcds_Maps gauge
+srcds_Maps{hostname="{{hostname}}"} {{Maps}}
 {% endif %}
 
 {% if FPS is defined %}
-# HELP gameserver_FPS currently unkown
-# TYPE gameserver_FPS gauge
-gameserver_FPS {{FPS}}
+# HELP srcds_FPS currently unkown
+# TYPE srcds_FPS gauge
+srcds_FPS{hostname="{{hostname}}"} {{FPS}}
 {% endif %}
 
 {% if svarms is defined %}
-# HELP gameserver_svarms probably the standard variation of the frametimes in ms
-# TYPE gameserver_svarms gauge
-gameserver_svarms {{svarms}}
+# HELP srcds_svarms probably the standard variation of the frametimes in ms
+# TYPE srcds_svarms gauge
+srcds_svarms{hostname="{{hostname}}"} {{svarms}}
 {% endif %}
 
 {% if varms is defined %}
-# HELP gameserver_varms probably the variation of the frametimes in ms
-# TYPE gameserver_varms gauge
-gameserver_varms {{varms}}
+# HELP srcds_varms probably the variation of the frametimes in ms
+# TYPE srcds_varms gauge
+srcds_varms{hostname="{{hostname}}"} {{varms}}
 {% endif %}
 
 {% if vartick is defined %}
-# HELP gameserver_vartick probably the variation of ticks
-# TYPE gameserver_vartick gauge
-gameserver_vartick {{vartick}}
+# HELP srcds_vartick probably the variation of ticks
+# TYPE srcds_vartick gauge
+srcds_vartick{hostname="{{hostname}}"} {{vartick}}
 {% endif %}
 
 {% if Users is defined %}{# L4D2 has Users and Players in the "stats" command #}
-# HELP gameserver_Users currently unknown
-# TYPE gameserver_Users gauge
-gameserver_Users {{Users}}
+# HELP srcds_Users currently unknown
+# TYPE srcds_Users gauge
+srcds_Users{hostname="{{hostname}}"} {{Users}}
 {% endif %}
