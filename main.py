@@ -23,6 +23,7 @@ async def handler(request):
             rcon = await asyncio.wait_for(RCON.create(ip, port, password, loop = asyncio.get_event_loop(), timeout=1, auto_reconnect_attempts=2),2)
             status = await asyncio.wait_for(rcon("status"),2)
             stats = await asyncio.wait_for(rcon("stats"),2)
+            rcon.close()
 
             server_dict = {"ip": ip, "port": port, "target": target}
 
@@ -69,6 +70,7 @@ async def handler(request):
             return web.Response(text=template.render(**server_dict))
 
         except Exception as e:
+            # TODO improve exception handling
             print(e)
             resp = """# HELP srcds_up is the gameserver reachable
 # TYPE srcds_up gauge
