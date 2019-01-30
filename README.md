@@ -52,3 +52,7 @@ You can use this URL for debugging purposes ;)
 - [ ] investigate aiorcon not timing out properly
 - [ ] make ip and port configurable
 - [ ] add a systemd unit file
+
+## More information
+
+I wrote a blog post about this exporter. You can find it [here](http://swagspace.org/posts/srcds-exporter.html)
