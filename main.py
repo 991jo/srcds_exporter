@@ -1,7 +1,7 @@
 import asyncio
-import re
 import json
-from loogging import getLogger
+import logging
+import re
 
 from socket import AF_INET
 from aiohttp import web
@@ -9,8 +9,16 @@ from aiorcon import RCON
 from jinja2 import Template, Environment
 
 # Logger
-logger = getLogger()
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
+# If possible, try to use uvloop for better performance
+try:
+    import uvloop
+    uvloop.install()
+    logger.info("Using uvloop")
+except:
+    pass
 
 # Statistic Mapper
 STATS_MAPPING = {
