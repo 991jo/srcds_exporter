@@ -1,12 +1,10 @@
 import asyncio
-import json
 import logging
 import re
 
-from socket import AF_INET
 from aiohttp import web
 from aiorcon import RCON
-from jinja2 import Template, Environment
+from jinja2 import Template
 
 # Logger
 logger = logging.getLogger()
