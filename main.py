@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import argparse
 
 from aiohttp import web
 from aiorcon import RCON
@@ -131,6 +132,14 @@ async def start_webserver(loop, bind_address, port):
 
 
 if __name__ == "__main__":
+    argparser = argparse.ArgumentParser(description=(
+            "srcds_exporter, an prometheus exporter for SRCDS based games "
+            "like CSGO, L4D2 and TF2"))
+    argparser.add_argument("--port", type=int, default=9200,
+            help="the port to which the exporter binds")
+    argparser.add_argument("--address", type=str, default="localhost",
+            help="the address to which the exporter binds")
+    args = argparser.parse_args()
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(start_webserver(loop, "localhost", 9200))
+    loop.run_until_complete(start_webserver(loop, args.address, args.port))
     loop.run_forever()
