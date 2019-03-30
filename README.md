@@ -53,6 +53,11 @@ You can use this URL for debugging purposes ;)
 - [ ] make ip and port configurable
 - [ ] add a systemd unit file
 
+## Docker Support
+
+The Dockerfile was added by [https://github.com/xvzf]. Thanks for that.
+I am not using docker, I can not give you support on that.
+
 ## More information
 
 I wrote a blog post about this exporter. You can find it [here](http://swagspace.org/posts/srcds-exporter.html)
