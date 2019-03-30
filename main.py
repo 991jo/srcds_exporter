@@ -114,9 +114,9 @@ async def handler(request):
         except Exception as e:
             # TODO improve exception handling
             logger.error(e)
-            resp = "# HELP srcds_up is the gameserver reachable" + \
-                   "# TYPE srcds_up gauge" + \
-                   "srcds_up 0"
+            resp = ("# HELP srcds_up is the gameserver reachable\n"
+                   "# TYPE srcds_up gauge\n"
+                   "srcds_up 0")
 
             return web.Response(text=resp)
 
