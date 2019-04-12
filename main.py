@@ -16,7 +16,7 @@ try:
     import uvloop
     uvloop.install()
     logger.info("Using uvloop")
-except:
+except Exception:
     pass
 
 # Statistic Mapper
@@ -28,41 +28,58 @@ STATS_MAPPING = {
     "Svms": "svarms"
 }
 
+# if the server is running in single server mode the target specification
+# has to be done via the commandline.
+# requests with a target specification are answered with 404.
+single_server_mode = False
 
 # Parse response file
-with open("response.j2","r") as f:
+with open("response.j2", "r") as f:
     t = f.read()
     template = Template(t, trim_blocks=True, lstrip_blocks=True,)
 
 
+async def rcon_query(ip, port, password):
+    """
+    queries the server given by ip and port with the stats and status commands
+    and returns the answer
+    """
+    # this first wait_for is to work around something which is maybe
+    # a bug in aiorcon
+    try:
+        rcon = await asyncio.wait_for(
+            RCON.create(
+                ip,
+                port,
+                password,
+                timeout=1,
+                auto_reconnect_attempts=2
+            ),
+            2
+        )
+
+        status = await asyncio.wait_for(rcon("status"), 2)
+        stats = await asyncio.wait_for(rcon("stats"), 2)
+        return status, stats
+    finally:
+        rcon.close()
+
+
 async def handler(request):
-    """ Main handle function, receives prometheus requests and queries
-    a game server """
+    """
+    Main handle function, receives prometheus requests and queries
+    a game server
+    """
 
     if request.path == "/metrics":
         try:
-            target  = request.query["target"]
+            target = request.query["target"]
             targets = target.split(":")
             ip = targets[0]
             port = targets[1]
             password = request.query["password"]
 
-            # this first wait_for is to work around something which is maybe
-            # a bug in aiorcon
-            rcon = await asyncio.wait_for(
-                RCON.create(
-                    ip,
-                    port,
-                    password,
-                    timeout=1,
-                    auto_reconnect_attempts=2
-                ),
-                2
-            )
-
-            status = await asyncio.wait_for(rcon("status"), 2)
-            stats = await asyncio.wait_for(rcon("stats"), 2)
-            rcon.close()
+            status, stats = rcon_query(ip, port, password)
 
             server_dict = {
                 "ip": ip,
@@ -78,7 +95,7 @@ async def handler(request):
                 if line.strip() == "":
                     break
 
-                key, value = (a.strip() for a in line.split(":",1))
+                key, value = (a.strip() for a in line.split(":", 1))
 
                 # Switch case for some keys
 
@@ -106,7 +123,6 @@ async def handler(request):
                     names[i] = STATS_MAPPING[name]
 
             values = [float(v) for v in values]
-            stats_dict = dict(zip(names, values))
 
             server_dict = {**server_dict, **dict(zip(names, values))}
 
@@ -116,8 +132,8 @@ async def handler(request):
             # TODO improve exception handling
             logger.error(e)
             resp = ("# HELP srcds_up is the gameserver reachable\n"
-                   "# TYPE srcds_up gauge\n"
-                   "srcds_up 0")
+                    "# TYPE srcds_up gauge\n"
+                    "srcds_up 0")
 
             return web.Response(text=resp)
 
@@ -136,9 +152,18 @@ if __name__ == "__main__":
             "srcds_exporter, an prometheus exporter for SRCDS based games "
             "like CSGO, L4D2 and TF2"))
     argparser.add_argument("--port", type=int, default=9200,
-            help="the port to which the exporter binds")
+                           help="the port to which the exporter binds")
     argparser.add_argument("--address", type=str, default="localhost",
-            help="the address to which the exporter binds")
+                           help="the address to which the exporter binds")
+    argparser.add_argument("--password", type=str, default=None,
+                           help="the password that is used if the exporter "
+                                "is run in single server mode")
+    argparser.add_argument("--server_address", type=str, default="localhost",
+                           help="the address which is queried if the is "
+                                "exporter is run in single server mode")
+    argparser.add_argument("--server_port", type=int, default=27015,
+                           help="the queried which is queried if the is "
+                                "exporter is run in single server mode")
     args = argparser.parse_args()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(start_webserver(loop, args.address, args.port))
