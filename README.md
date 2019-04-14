@@ -50,7 +50,7 @@ You can use this URL for debugging purposes ;)
 
 - [x] make example config for Prometheus
 - [ ] investigate aiorcon not timing out properly
-- [ ] make ip and port configurable
+- [x] make ip and port configurable
 - [ ] add a systemd unit file
 
 ## Docker Support
