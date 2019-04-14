@@ -49,6 +49,9 @@ async def rcon_query(ip, port, password):
     rcon = await asyncio.wait_for(RCON.create(ip,
                                               port,
                                               password,
+                                              # the loop is required due to a
+                                              # bug in aiorcon. See
+                                              # https://github.com/skmendez/aiorcon/pull/1
                                               loop=asyncio.get_event_loop(),
                                               timeout=1,
                                               auto_reconnect_attempts=2),
