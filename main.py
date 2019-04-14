@@ -46,23 +46,18 @@ async def rcon_query(ip, port, password):
     """
     # this first wait_for is to work around something which is maybe
     # a bug in aiorcon
-    try:
-        rcon = await asyncio.wait_for(
-            RCON.create(
-                ip,
-                port,
-                password,
-                timeout=1,
-                auto_reconnect_attempts=2
-            ),
-            2
-        )
+    rcon = await asyncio.wait_for(RCON.create(ip,
+                                              port,
+                                              password,
+                                              loop=asyncio.get_event_loop(),
+                                              timeout=1,
+                                              auto_reconnect_attempts=2),
+                                  2)
 
-        status = await asyncio.wait_for(rcon("status"), 2)
-        stats = await asyncio.wait_for(rcon("stats"), 2)
-        return status, stats
-    finally:
-        rcon.close()
+    status = await asyncio.wait_for(rcon("status"), 2)
+    stats = await asyncio.wait_for(rcon("stats"), 2)
+    rcon.close()
+    return status, stats
 
 
 async def handler(request):
@@ -78,8 +73,9 @@ async def handler(request):
             ip = targets[0]
             port = targets[1]
             password = request.query["password"]
+            print(ip, port, password)
 
-            status, stats = rcon_query(ip, port, password)
+            status, stats = await rcon_query(ip, port, password)
 
             server_dict = {
                 "ip": ip,
@@ -130,7 +126,7 @@ async def handler(request):
 
         except Exception as e:
             # TODO improve exception handling
-            logger.error(e)
+            logger.exception(e)
             resp = ("# HELP srcds_up is the gameserver reachable\n"
                     "# TYPE srcds_up gauge\n"
                     "srcds_up 0")
