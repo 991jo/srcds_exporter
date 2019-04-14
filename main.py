@@ -114,7 +114,9 @@ async def handler(request):
                     pass
 
             # parse stats
-            names, values, _ = [a.split() for a in stats.splitlines()]
+            lines = stats.splitlines()
+            names = lines[0].split()
+            values = lines[1].split()
 
             # Replace stats
             for i, name in enumerate(names):
