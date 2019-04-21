@@ -72,7 +72,7 @@ class SRCDSExporter:
             if isinstance(e, ConnectionRefusedError):
                 logger.info("Connection was refused")
                 return web.Response(text="Connection refused by targed",
-                                    status=404)  # TODO improve log message
+                                    status=503)  # TODO improve log message
             # Add other Exception types here
             logger.log("An Exception occured during the following request:")  # TODO improve log message
             logger.exception(e)
