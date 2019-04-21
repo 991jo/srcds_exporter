@@ -13,7 +13,21 @@ It uses the `status` and `stats` commands for this.
 4. `pip install -r requirements.txt`
 5. `python3 main.py`
 
+## Multi-Server vs. Single Server Mode
+
+Initially this software was build as an exporter which can query many servers.
+This conflicts a bit with the Prometheus Exporter mentality that you should
+run one exporter per instance of your application.
+Also you would have to know the RCON password which would get passed around
+in HTTP requests.
+Therefore SRCDS Exporter now supports the single server mode.
+In this mode you have to specify the ip, port and password as a start
+parameter. But your HTTP requests dont need those parameters anymore.
+Also the exporter does not answer requests which have those fields set.
+
 ## How to query via Prometheus:
+
+### Multi-Server-Mode
 
 You can use the following example config.
 Please adjust the IP:port in the last row to the IP:port your exporter uses.
@@ -45,6 +59,39 @@ Please adjust the IP:port in the last row to the IP:port your exporter uses.
 Basically you have to build this URL:
 `http://<exporter-address>:9200/metrics?target=<host>:<port>&password=<yourrconpassword>`
 You can use this URL for debugging purposes ;)
+
+### Single-Server-Mode
+
+For the single server mode you have to specify the parameters on the commandline.
+
+    python3 main.py --server_address <server address> --server_port <port> --password <rcon password>
+
+Your Prometheus config could look like this:
+
+```
+  - job_name: srcds
+
+    scrape_interval: 5s
+
+    metrics_path: /metrics
+
+    static_configs:
+          - targets: ["<ip>:<port>"]
+```
+
+## Known issues
+
+Some servers do not respond to RCON while changing maps.
+This results in timeouts and connection errors for the exporter.
+This means that you won't get data while the server changes the map.
+This is okay because many of the metrics are irrelevant during map change anyway
+(e.g. the server FPS rate).
+
+## Getting Help
+
+For a list of the commandline arguments start the exporter with the `--help`
+flag.
+If you have other problems, feel free to open an issue.
 
 ## TODO
 
