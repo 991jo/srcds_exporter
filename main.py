@@ -170,7 +170,9 @@ class SRCDSExporter:
         """
         Parses the stats RCON response.
         """
-        names, values, _ = [a.split() for a in stats.splitlines()]
+        lines = [a.split() for a in stats.splitlines()]
+        names = lines[0]
+        values = lines[1]
 
         # Replace stats
         for i, name in enumerate(names):
