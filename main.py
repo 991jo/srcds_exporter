@@ -168,7 +168,7 @@ class SRCDSExporter:
 
     def _parse_stats(self, stats, server_dict):
         """
-        Parses the stats ROCN response.
+        Parses the stats RCON response.
         """
         names, values, _ = [a.split() for a in stats.splitlines()]
 
