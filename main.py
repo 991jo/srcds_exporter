@@ -104,21 +104,25 @@ class SRCDSExporter:
         """
         # this first wait_for is to work around something which is maybe
         # a bug in aiorcon
-        rcon = await asyncio.wait_for(
-                RCON.create(ip,
-                            port,
-                            password,
-                            # the loop is required due to a
-                            # bug in aiorcon. See
-                            # https://github.com/skmendez/aiorcon/pull/1
-                            loop=asyncio.get_event_loop(),
-                            timeout=1,
-                            auto_reconnect_attempts=2),
-                2)
+        status = None
+        stats = None
+        try:
+            rcon = await asyncio.wait_for(
+                    RCON.create(ip,
+                                port,
+                                password,
+                                # the loop is required due to a
+                                # bug in aiorcon. See
+                                # https://github.com/skmendez/aiorcon/pull/1
+                                loop=asyncio.get_event_loop(),
+                                timeout=1,
+                                auto_reconnect_attempts=2),
+                    2)
 
-        status = await asyncio.wait_for(rcon("status"), 2)
-        stats = await asyncio.wait_for(rcon("stats"), 2)
-        rcon.close()
+            status = await asyncio.wait_for(rcon("status"), 2)
+            stats = await asyncio.wait_for(rcon("stats"), 2)
+        finally:
+            rcon.close()
         return status, stats
 
     def _get_target(self, request):
