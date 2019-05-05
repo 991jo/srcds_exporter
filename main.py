@@ -74,14 +74,14 @@ class SRCDSExporter:
                 return web.Response(text="Connection refused by targed",
                                     status=503)  # TODO improve log message
             # Add other Exception types here
-            logger.log("An Exception occured during the following request:")  # TODO improve log message
+            logger.warn("An Exception occured during the following request:")  # TODO improve log message
             logger.exception(e)
             return self._server_down_response()
 
         server_dict = {
             "ip": ip,
             "port": port,
-            "target": f"{ip}:{port}"
+            "target": "{%s}:{%s}" % (ip, port)
         }
 
         self._parse_query(stats, status, server_dict)
