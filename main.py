@@ -71,7 +71,7 @@ class SRCDSExporter:
                 return self._server_down_response()
             if isinstance(e, ConnectionRefusedError):
                 logger.info("Connection was refused")
-                return web.Response(text="Connection refused by targed",
+                return web.Response(text="Connection refused by target",
                                     status=503)  # TODO improve log message
             # Add other Exception types here
             logger.warn("An Exception occured during the following request:")  # TODO improve log message
