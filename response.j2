@@ -73,3 +73,9 @@ srcds_vartick{hostname="{{hostname}}"} {{vartick}}
 # TYPE srcds_Users gauge
 srcds_Users{hostname="{{hostname}}"} {{Users}}
 {% endif %}
+
+{% if Connects is defined %}{# Connects is not known by CSGO but by FoF, HL2DM and TF2#}
+# HELP srcds_Connects the numer of times someone connected to the server
+# TYPE srcds_Users counter
+srcds_Connects{hostname="{{hostname}}"} {{Connects}}
+{% endif %}

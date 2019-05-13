@@ -22,10 +22,13 @@ except Exception:
 # Statistic Mapper
 STATS_MAPPING = {
     "In": "NetIn",
+    "In_(KB/s)": "NetIn",
     "Out": "NetOut",
+    "Out_(KB/s)": "NetOut",
     "+-ms": "varms",
     "~tick": "vartick",
-    "Svms": "svarms"
+    "Svms": "svarms",
+    "Map_changes": "Maps",
 }
 
 TEMPLATE_FILE = "response.j2"
@@ -58,23 +61,26 @@ class SRCDSExporter:
         try:
             ip, port, password = self._get_target(request)
         except TargetSpecificationError as e:
-            logger.info("received invalid target specification")  # TODO improve log message
-            return web.Response(text="target specification is invalid: %s" % str(e),
-                                status=404)
+            # TODO improve log message
+            logger.info("received invalid target specification")
+            return web.Response(text="target specification is invalid: %s"
+                                % str(e), status=404)
 
         # make the RCON queries
         try:
             status, stats = await self._rcon_query(ip, port, password)
         except Exception as e:
             if isinstance(e, TimeoutError):
-                logger.info("a timeout error occured")  # TODO improve log message
+                # TODO improve log message
+                logger.info("a timeout error occured")
                 return self._server_down_response()
             if isinstance(e, ConnectionRefusedError):
                 logger.info("Connection was refused")
                 return web.Response(text="Connection refused by target",
                                     status=503)  # TODO improve log message
             # Add other Exception types here
-            logger.warn("An Exception occured during the following request:")  # TODO improve log message
+            # TODO improve log message
+            logger.warn("An Exception occured during the following request:")
             logger.exception(e)
             return self._server_down_response()
 
@@ -99,8 +105,8 @@ class SRCDSExporter:
 
     async def _rcon_query(self, ip, port, password):
         """
-        queries the server given by ip and port with the stats and status commands
-        and returns the answer.
+        queries the server given by ip and port with the stats and status
+        commands and returns the answer.
         """
         # this first wait_for is to work around something which is maybe
         # a bug in aiorcon
@@ -198,8 +204,12 @@ class SRCDSExporter:
             # players
             if line.strip() == "":
                 break
-
-            key, value = (a.strip() for a in line.split(":", 1))
+            try:
+                key, value = (a.strip() for a in line.split(":", 1))
+            except ValueError:  # FoF has no blank line between the key value
+                                # pairs and the player list. This results in a
+                                # value error.
+                break
 
             if key == "players":
                 m = re.match(
