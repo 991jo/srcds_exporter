@@ -7,6 +7,7 @@ It uses the `status` and `stats` commands for this.
 ## Supported Servers:
 
 - CSGO
+- CSS
 - L4D2
 - FoF
 - HL2DM
