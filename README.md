@@ -4,6 +4,14 @@ This is an exporter for the Prometheus monitoring system.
 It exports data from SRCDS Gameservers (e.g. CSGO, TF2, L4D2, ...) via rcon.
 It uses the `status` and `stats` commands for this.
 
+## Supported Servers:
+
+- CSGO
+- L4D2
+- FoF
+- HL2DM
+- TF2
+
 ## How to install:
 
 1. `git clone https://github.com/991jo/srcds_exporter.git`
