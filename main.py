@@ -80,7 +80,7 @@ class SRCDSExporter:
                                     status=503)  # TODO improve log message
             # Add other Exception types here
             # TODO improve log message
-            logger.warn("An Exception occured during the following request:")
+            logger.warning("An Exception occured during the following request:")
             logger.exception(e)
             return self._server_down_response()
 
