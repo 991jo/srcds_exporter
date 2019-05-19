@@ -62,7 +62,7 @@ class SRCDSExporter:
             ip, port, password = self._get_target(request)
         except TargetSpecificationError as e:
             # TODO improve log message
-            logger.info("received invalid target specification")
+            logger.info("received invalid target specification:%s" % str(e))
             return web.Response(text="target specification is invalid: %s"
                                 % str(e), status=404)
 
@@ -71,11 +71,10 @@ class SRCDSExporter:
             status, stats = await self._rcon_query(ip, port, password)
         except Exception as e:
             if isinstance(e, TimeoutError):
-                # TODO improve log message
-                logger.info("a timeout error occured")
+                logger.info("a timeout error occured during the RCON request.")
                 return self._server_down_response()
             if isinstance(e, ConnectionRefusedError):
-                logger.info("Connection was refused")
+                logger.info("Connection was refused by the gameserver")
                 return web.Response(text="Connection refused by target",
                                     status=503)  # TODO improve log message
             # Add other Exception types here
