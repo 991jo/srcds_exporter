@@ -207,12 +207,27 @@ class SRCDSExporter:
                 key, value = (a.strip() for a in line.split(":", 1))
             except ValueError:  # FoF has no blank line between the key value
                                 # pairs and the player list. This results in a
-                                # value error.
+                                # ValueError.
                 break
 
             if key == "players":
+                # Regex explanation:
+                # There are 3 types of players-patterns
+                # "0 humans, 0 bots (16/0 max) (hibernating)" # CSGO
+                # "0 (16 max)" # Gmod
+                # "12 humans, 0 bots (16 max)" # everything else
+                # The first number is always the amount of players, followed
+                # by a space. Then there might be the string "humans, "
+                # but not for Gmod. Then comes the number of bots, but
+                # not for Gmod and than the max_players in brackets.
+                # csgo has some special things here where the have a 16/0
+                # I currently don't know what the /0 stands for. Maybe STV
+                # viewers?
+
                 m = re.match(
-                    "(?P<players>\d+)\D+(?P<bots>\d+)\D+(?P<max_players>\d+)\\.*",
+                    r"(?P<players>\d+)\s+(humans,\s+)?"\
+                    r"((?P<bots>\d+)\s+bots\s+)?"\
+                    r"\((?P<max_players>\d+)(/\d)? max\)",
                     value
                 )
 

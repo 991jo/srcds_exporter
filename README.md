@@ -12,6 +12,7 @@ It uses the `status` and `stats` commands for this.
 - FoF
 - HL2DM
 - TF2
+- Gmod
 
 ## How to install:
 
