@@ -142,8 +142,9 @@ class SRCDSExporter:
             # target specifications are invalid in this mode
             for key in ["target", "password"]:
                 if key in request.query:
-                    raise TargetSpecificationError("'target' and 'password' not"
-                                                   " allowed in single server mode.")
+                    raise TargetSpecificationError(
+                            "'target' and 'password' not"
+                            " allowed in single server mode.")
 
             return (self._ip, self._port, self._password)
 
@@ -154,8 +155,9 @@ class SRCDSExporter:
                 ip = targets[0]
                 port = targets[1]
             except Exception:
-                raise TargetSpecificationError("target %s is not a valid target"
-                                               "specification" % target)
+                raise TargetSpecificationError(
+                        "target %s is not a valid target"
+                        "specification" % target)
             try:
                 password = request.query["password"]
             except Exception:
@@ -206,9 +208,10 @@ class SRCDSExporter:
                 break
             try:
                 key, value = (a.strip() for a in line.split(":", 1))
-            except ValueError:  # FoF has no blank line between the key value
-                                # pairs and the player list. This results in a
-                                # ValueError.
+            except ValueError:
+                # FoF has no blank line between the key value
+                # pairs and the player list. This results in a
+                # ValueError.
                 break
 
             if key == "players":
@@ -226,8 +229,8 @@ class SRCDSExporter:
                 # viewers?
 
                 m = re.match(
-                    r"(?P<players>\d+)\s+(humans,\s+)?"\
-                    r"((?P<bots>\d+)\s+bots\s+)?"\
+                    r"(?P<players>\d+)\s+(humans,\s+)?"
+                    r"((?P<bots>\d+)\s+bots\s+)?"
                     r"\((?P<max_players>\d+)(/\d)? max\)",
                     value
                 )
