@@ -135,7 +135,10 @@ class SRCDSExporter:
         """
         returns a tuple of (ip, port, password) which to query depending
         on the data given in the Exporter and the request.
-        Raises a exception if the target specification is invalid.
+        Raises an exception if the target specification is invalid.
+
+        :param aiohttp.Request request: The request received by the webserver
+        :returns tuple(str, str, str): ip, port and password
         """
         if self._single_server:
             # The server is running in single server mode,
@@ -180,7 +183,10 @@ class SRCDSExporter:
 
     def _parse_stats(self, stats, server_dict):
         """
-        Parses the stats RCON response.
+        Parses the status RCON response and adds the data to *server_dict*
+
+        :param str stats: the output of the *stats* command
+        :param dict server_dict: the dict to which the data is added
         """
         lines = [a.split() for a in stats.splitlines()]
         names = lines[0]
@@ -198,7 +204,10 @@ class SRCDSExporter:
 
     def _parse_status(self, status, server_dict):
         """
-        Parses the status RCON response.
+        Parses the status RCON response and adds the data to *server_dict*
+
+        :param str status: the output of the *status* command
+        :param dict server_dict: the dict to which the data is added
         """
         status = status.splitlines()
         for line in status:
@@ -250,7 +259,12 @@ with open("response.j2", "r") as f:
 
 
 async def start_webserver(loop, args):
-    """ Startsup the server """
+    """
+    Starts up the server
+
+    :param asyncio.AbstractEventLoop loop: the asyncio event loop to use
+    :param argsparse.Namespace args: the namespace given by argparse
+    """
 
     if args.server_address and args.server_port and args.password:
         exporter = SRCDSExporter(args.server_address,
@@ -266,6 +280,7 @@ async def start_webserver(loop, args):
 
 
 if __name__ == "__main__":
+    """Builds the argument parser and starts a server in a asyncio-loop"""
     argparser = argparse.ArgumentParser(description=(
             "srcds_exporter, an prometheus exporter for SRCDS based games "
             "like CSGO, L4D2 and TF2"))
