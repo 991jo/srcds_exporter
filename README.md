@@ -63,11 +63,11 @@ Please adjust the IP:port in the last row to the IP:port your exporter uses.
         - source_labels: [__param_target]
           target_label: instance
         - target_label: __address__
-          replacement: 127.0.0.1:9200  # The real ip/port of the srcds_exporter
+          replacement: 127.0.0.1:9591 # The real ip/port of the srcds_exporter
 ```
 
 Basically you have to build this URL:
-`http://<exporter-address>:9200/metrics?target=<host>:<port>&password=<yourrconpassword>`
+`http://<exporter-address>:9591/metrics?target=<host>:<port>&password=<yourrconpassword>`
 You can use this URL for debugging purposes ;)
 
 ### Single-Server-Mode

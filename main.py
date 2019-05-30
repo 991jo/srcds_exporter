@@ -112,6 +112,7 @@ class SRCDSExporter:
         # a bug in aiorcon
         status = None
         stats = None
+        rcon = None
         try:
             rcon = await asyncio.wait_for(
                     RCON.create(ip,
@@ -124,11 +125,15 @@ class SRCDSExporter:
                                 timeout=1,
                                 auto_reconnect_attempts=2),
                     2)
+            if rcon is None:
+                raise Error
+            print(rcon)
 
             status = await asyncio.wait_for(rcon("status"), 2)
             stats = await asyncio.wait_for(rcon("stats"), 2)
         finally:
-            rcon.close()
+            if rcon is not None:
+                rcon.close()
         return status, stats
 
     def _get_target(self, request):
@@ -284,7 +289,7 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser(description=(
             "srcds_exporter, an prometheus exporter for SRCDS based games "
             "like CSGO, L4D2 and TF2"))
-    argparser.add_argument("--port", type=int, default=9200,
+    argparser.add_argument("--port", type=int, default=9591,
                            help="the port to which the exporter binds")
     argparser.add_argument("--address", type=str, default="localhost",
                            help="the address to which the exporter binds")

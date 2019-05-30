@@ -13,4 +13,4 @@ COPY --chown=exporter . .
 
 CMD ["python", "main.py"]
 
-EXPOSE 9200
+EXPOSE 9591
