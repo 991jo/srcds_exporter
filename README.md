@@ -118,3 +118,7 @@ I am not using docker, I can not give you support on that.
 ## More information
 
 I wrote a blog post about this exporter. You can find it [here](http://swagspace.org/posts/srcds-exporter.html)
+
+## Further information regarding var, varms and sv
+
+(https://www.reddit.com/r/GlobalOffensive/comments/23zt18/explanation_of_the_new_net_graph_thanks_vitaliy/)
