@@ -4,7 +4,7 @@ async-timeout==3.0.1
 attrs==19.1.0
 chardet==3.0.4
 idna==2.8
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 multidict==4.5.2
 uvloop==0.12.2
